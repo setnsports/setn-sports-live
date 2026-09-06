@@ -1,0 +1,31 @@
+name: Unpack SETN Live
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Unpack SETN Sports Live
+        run: |
+          mkdir -p temp
+          unzip SETN_Sports_Live_Phone_Setup.zip -d temp
+          cp -R temp/. .
+          rm -rf temp
+          rm SETN_Sports_Live_Phone_Setup.zip
+
+      - name: Commit project files
+        run: |
+          git config user.name "SETN Sports"
+          git config user.email "setnsports@gmail.com"
+          git add .
+          git commit -m "Add SETN Sports Live Phase 1" || exit 0
+          git push
